@@ -15,8 +15,6 @@ public protocol SuggestionValue: Equatable, InputTypeInitiable {
 /// Generic suggestion row superclass that defines how to get a list of suggestions based on user input.
 open class _SuggestionRow<Cell: CellType>: FieldRow<Cell> where Cell: BaseCell, Cell: TextFieldCell, Cell.Value: SuggestionValue {
 //SuggestionCell<T>
-    public var filterFunction: ((String) -> [Cell.Value])!
-
     required public init(tag: String?) {
         super.init(tag: tag)
 
@@ -28,6 +26,8 @@ open class _SuggestionRow<Cell: CellType>: FieldRow<Cell> where Cell: BaseCell, 
 
 /// Row that lets the user choose a suggested option from a list shown in the inputAccessoryView.
 public final class SuggestionAccessoryRow<T: SuggestionValue>: _SuggestionRow<SuggestionCollectionCell<T, SuggestionCollectionViewCell<T>>>, RowType {
+    public var filterFunction: ((String, @escaping ([T]) -> Void) -> Void)!
+
     required public init(tag: String?) {
         super.init(tag: tag)
     }
@@ -35,6 +35,8 @@ public final class SuggestionAccessoryRow<T: SuggestionValue>: _SuggestionRow<Su
 
 /// Row that lets the user choose a suggestion option from a table below the row.
 public final class SuggestionTableRow<T: SuggestionValue>: _SuggestionRow<SuggestionTableCell<T, SuggestionTableViewCell<T>>>, RowType {
+    public var filterFunction: ((String, @escaping ([T]) -> Void) -> Void)!
+    
     required public init(tag: String?) {
         super.init(tag: tag)
     }

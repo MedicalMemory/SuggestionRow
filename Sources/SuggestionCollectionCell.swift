@@ -10,7 +10,7 @@ import UIKit
 
 let accessoryViewHeight = CGFloat(40)
 
-open class SuggestionCollectionCell<T: SuggestionValue, CollectionViewCell: UICollectionViewCell>: SuggestionCell<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CollectionViewCell: EurekaSuggestionCollectionViewCell, CollectionViewCell.S == T {
+open class SuggestionCollectionCell<T, CollectionViewCell: UICollectionViewCell>: SuggestionCell<T>, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout where CollectionViewCell: EurekaSuggestionCollectionViewCell, CollectionViewCell.S == T {
     
     /// callback that can be used to customize the appearance of the UICollectionViewCell in the inputAccessoryView
     public var customizeCollectionViewCell: ((CollectionViewCell) -> Void)?
@@ -58,8 +58,11 @@ open class SuggestionCollectionCell<T: SuggestionValue, CollectionViewCell: UICo
     }
 
     override func setSuggestions(_ string: String) {
-        suggestions = (row as? _SuggestionRow<SuggestionCollectionCell>)?.filterFunction(string)
-        reload()
+        (row as? SuggestionAccessoryRow<T>)?.filterFunction(string, self.returnSuggestions)
+    }
+    
+    func returnSuggestions(_ suggestions: [T]) {
+        self.suggestions = suggestions
     }
     
     //MARK: UICollectionViewDelegate and Datasource

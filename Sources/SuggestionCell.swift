@@ -12,7 +12,11 @@ import Eureka
 /// General suggestion cell. Create a subclass or use SuggestionCollectionCell or SuggestionTableCell.
 open class SuggestionCell<T: SuggestionValue>: _FieldCell<T>, CellType {
     let cellReuseIdentifier = "Eureka.SuggestionCellIdentifier"
-    var suggestions: [T]?
+    var suggestions: [T]? {
+        didSet {
+            reload()
+        }
+    }
     
     required public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

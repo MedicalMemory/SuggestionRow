@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-open class SuggestionTableCell<T: SuggestionValue, TableViewCell: UITableViewCell>: SuggestionCell<T>, UITableViewDelegate, UITableViewDataSource where TableViewCell: EurekaSuggestionTableViewCell, TableViewCell.S == T {
+open class SuggestionTableCell<T, TableViewCell: UITableViewCell>: SuggestionCell<T>, UITableViewDelegate, UITableViewDataSource where TableViewCell: EurekaSuggestionTableViewCell, TableViewCell.S == T {
     
     /// callback that can be used to customize the table cell.
     public var customizeTableViewCell: ((TableViewCell) -> Void)?
@@ -54,8 +54,11 @@ open class SuggestionTableCell<T: SuggestionValue, TableViewCell: UITableViewCel
     }
 
     override func setSuggestions(_ string: String) {
-        suggestions = (row as? _SuggestionRow<SuggestionTableCell>)?.filterFunction(string)
-        reload()
+        (row as? SuggestionTableRow<T>)?.filterFunction(string, self.returnSuggestions)
+    }
+    
+    func returnSuggestions(_ suggestions: [T]) {
+        self.suggestions = suggestions
     }
     
     open override func textFieldDidChange(_ textField: UITextField) {
